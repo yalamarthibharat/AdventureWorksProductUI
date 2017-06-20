@@ -1,0 +1,81 @@
+﻿@model PagedList.IPagedList<Product>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm("Index", "Products", FormMethod.Get))
+{
+    <p>
+        Find by Product Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+    <table class="table">
+        <tr>
+        <tr>
+            <th>
+                @Html.ActionLink("Name", "Index", new { SortOrder = ViewBag.NameSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink(" Product Number", "Index", new { SortOrder = ViewBag.NumberSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Color", "Index", new { SortOrder = ViewBag.ColorSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("SafetySocket Level", "Index", new { SortOrder = ViewBag.SafetyStockLevelSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Reorder Point", "Index", new { SortOrder = ViewBag.ReorderPointSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Standard Cost", "Index", new { SortOrder = ViewBag.StandardCostSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("List Price", "Index", new { SortOrder = ViewBag.ListPriceSortParameter, CurrentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SafetyStockLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderPoint)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StandardCost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ListPrice)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProductID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+                </td>
+            </tr>
+        }
+    </table>
+<br />
+    page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
